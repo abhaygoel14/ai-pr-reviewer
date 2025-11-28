@@ -10,20 +10,42 @@ if (!apiKey) {
 const genAI = new GoogleGenerativeAI(apiKey || "");
 const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-export async function generateCodeReview(diff: string): Promise<string> {
+export async function generateCodeReview(
+  diff: string,
+  intent: any
+): Promise<string> {
   const prompt = `
-You are a senior software engineer doing a strict yet practical code review.
-You are given a Git diff from a pull request.
+You are a senior code reviewer.
 
-Tasks:
-- Identify real issues (bugs, potential security issues, performance problems).
-- Suggest improvements for readability, maintainability, and best practices.
-- Highlight any suspicious patterns or anti-patterns.
-- If the diff is mostly fine, say that and only mention important nits.
-- Keep the response under about 25-30 lines.
-- Use markdown with headings and bullet points.
+Here is the developer intent:
 
-Here is the diff:
+Jira Ticket: ${intent.jira}
+Application: ${intent.app}
+Feature: ${intent.feature}
+Description: ${intent.description}
+
+You must:
+- Understand the business purpose
+- Validate whether code changes match this intent
+- Identify bugs, risks, mismatches
+- Focus only on the changed code
+- Return a structured markdown PR review
+
+The output SHOULD include:
+
+## 🔍 Summary
+- What the code is trying to do based on intent
+
+## ⚠️ Issues
+- Real bugs or logic issues (max 5)
+
+## 🛠 Suggestions
+- Improvements
+
+## 🧪 Intent Alignment Check
+- Does the code solve what the commit message claims?
+
+Here is the PR diff:
 ${diff}
 `;
 

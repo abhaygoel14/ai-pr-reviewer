@@ -25,16 +25,42 @@ async function githubApi(path: string, options: any = {}) {
   return res.json();
 }
 
-// Get diff (patch) for PR
+export async function getPullRequestDetails(
+  owner: string,
+  repo: string,
+  prNumber: number
+) {
+  return githubApi(`/repos/${owner}/${repo}/pulls/${prNumber}`);
+}
+
+// Latest commits (to get intent message)
+export async function getPRCommits(
+  owner: string,
+  repo: string,
+  prNumber: number
+) {
+  return githubApi(`/repos/${owner}/${repo}/pulls/${prNumber}/commits`);
+}
+
+// Changed files list
+export async function getChangedFiles(
+  owner: string,
+  repo: string,
+  prNumber: number
+) {
+  return githubApi(`/repos/${owner}/${repo}/pulls/${prNumber}/files`);
+}
+
+// Diff endpoint
 export async function getPullRequestDiff(
   owner: string,
   repo: string,
   prNumber: number
-): Promise<string> {
+) {
   const baseUrl = "https://api.github.com";
   const url = `${baseUrl}/repos/${owner}/${repo}/pulls/${prNumber}`;
 
-  const headers: Record<string, string> = {
+  const headers = {
     Accept: "application/vnd.github.v3.diff",
     Authorization: `Bearer ${GITHUB_TOKEN}`,
     "X-GitHub-Api-Version": "2022-11-28",
@@ -50,7 +76,7 @@ export async function getPullRequestDiff(
   return diff;
 }
 
-// Post a single overall PR comment (not inline per-line yet)
+// Post normal PR comment
 export async function postPullRequestComment(
   owner: string,
   repo: string,
