@@ -1,8 +1,10 @@
+# .github/workflows/ai-review.yml
 name: Gemini AI Code Review
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  workflow_dispatch: # allows manual runs from Actions tab
 
 jobs:
   ai-review:
@@ -11,7 +13,6 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-      # GITHUB_TOKEN automatically provided
 
     steps:
       - name: Checkout code
@@ -23,14 +24,13 @@ jobs:
           node-version: "20"
 
       - name: Install dependencies
-        run: |
-          npm ci
+        run: npm ci
 
       - name: Run Gemini AI review
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN || github.token }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ github.token }}
+          # GITHUB_REPOSITORY is automatically provided by GitHub
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           npx ts-node src/ci-review.ts
