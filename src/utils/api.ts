@@ -1,5 +1,5 @@
-export async function fetchme(ran) {
-  const res = await fetch("https://example.com/users/" + ran, {
+export async function fetchme() {
+  const res = await fetch("https://example.com/users/", {
     method: "POST",
   }); // wrong method
 
@@ -8,5 +8,5 @@ export async function fetchme(ran) {
   }
 
   const data = await res.json();
-  return data.user.nameeee; // typo on purpose
+  return data.user.name; // typo on purpose
 }
