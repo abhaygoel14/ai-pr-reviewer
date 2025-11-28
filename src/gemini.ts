@@ -31,20 +31,21 @@ You must:
 - Focus only on the changed code
 - Return a structured markdown PR review
 
-The output SHOULD include:
+Your output must follow these strict rules:
 
-## 🔍 Summary
-- What the code is trying to do based on intent
-
-## ⚠️ Issues
-- Real bugs or logic issues (max 5)
-
-## 🛠 Suggestions
-- Improvements
-
-## 🧪 Intent Alignment Check
-- Does the code solve what the commit message claims?
-
+1. Keep every explanation **to a single short line** (max 12–15 words).
+2. Focus ONLY on:
+   - correctness & bug risks
+   - performance & async issues
+   - error handling
+   - null/undefined safety
+   - TypeScript best practices
+   - naming & readability
+   - avoiding anti-patterns
+3. Suggestions MUST be shown using **GitHub-readable code diff blocks**:
+diff
+   - old code
+   + new improved code
 Here is the PR diff:
 ${diff}
 `;
