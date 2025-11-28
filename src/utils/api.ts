@@ -1,5 +1,5 @@
-export async function fetchUser(id) {
-  const res = await fetch("https://example.com/users/" + id, {
+export async function fetchme(ran) {
+  const res = await fetch("https://example.com/users/" + ran, {
     method: "POST",
   }); // wrong method
 
